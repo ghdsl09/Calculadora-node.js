@@ -1,0 +1,71 @@
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+/**
+ * Função para realizar a operação matemática.
+ * @param {number} num1 - O primeiro número.
+ * @param {string} operador - O operador matemático (+, -, *, /).
+ * @param {number} num2 - O segundo número.
+ * @returns {number|string} O resultado da operação ou uma mensagem de erro.
+ */
+function calcular(num1, operador, num2) {
+  let resultado;
+  // Converte as entradas para números de ponto flutuante, aceitando até 2 casas decimais
+  const numero1 = parseFloat(num1);
+  const numero2 = parseFloat(num2);
+
+  // Usa a estrutura condicional `if/else` para validar as entradas
+  if (isNaN(numero1) || isNaN(numero2)) {
+    return 'Erro: Por favor, insira apenas números.';
+  }
+
+  // Usa `switch/case` ou `if/else if/else` para determinar a operação
+  switch (operador) {
+    case '+':
+      resultado = numero1 + numero2;
+      break;
+    case '-':
+      resultado = numero1 - numero2;
+      break;
+    case '*':
+      resultado = numero1 * numero2;
+      break;
+    case '/':
+      // Usa `if` para verificar a divisão por zero
+      if (numero2 === 0) {
+        return 'Erro: Divisão por zero não é permitida.';
+      }
+      resultado = numero1 / numero2;
+      break;
+    default:
+      // Usa `if/else` para tratar operadores inválidos
+      return `Erro: O operador '${operador}' não é válido. Use +, -, * ou /.`;
+  }
+
+  // Arredonda o resultado para no máximo duas casas decimais
+  // O operador '+' na frente de toFixed() converte a string de volta para um número
+  return +resultado.toFixed(2);
+}
+
+// Inicia a interação com o usuário
+console.log('Calculadora em Node.js');
+
+// Pergunta o primeiro número
+rl.question('Digite o primeiro número: ', (num1) => {
+  // Pergunta o operador
+  rl.question('Digite o operador (+, -, *, /): ', (operador) => {
+    // Pergunta o segundo número
+    rl.question('Digite o segundo número: ', (num2) => {
+      // Chama a função de cálculo e exibe o resultado
+      const resultado = calcular(num1, operador, num2);
+      console.log(`Resultado: ${resultado}`);
+
+      // Fecha a interface de leitura
+      rl.close();
+    });
+  });
+});
